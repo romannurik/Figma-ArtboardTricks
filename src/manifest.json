@@ -1,0 +1,31 @@
+{
+  "api": "1.0.0",
+  "name": "Artboard Tricks",
+  "main": "main.js",
+  "id": "813813054094909882",
+  "menu": [
+    {
+      "name": "Rearrange Artboards Into Grid",
+      "command": "rearrange"
+    },
+    {
+      "name": "Artboard Tricks Preferences",
+      "command": "prefs"
+    },
+    {
+      "name": "Fit Artboard to Contents",
+      "command": "fit-to-contents"
+    }
+  ],
+  "relaunchButtons": [
+    {
+      "command": "relaunch-rearrange",
+      "name": "Rearrange Artboards Into Grid"
+    },
+    {
+      "command": "relaunch-fit-to-contents",
+      "name": "Fit Artboard to Contents",
+      "multipleSelection": true
+    }
+  ]
+}
