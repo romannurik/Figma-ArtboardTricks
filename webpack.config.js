@@ -19,7 +19,7 @@ module.exports = {
         test: /\.embedded\.(j|t)sx?$/,
         exclude: /node_modules/,
         use: [
-          require.resolve('figma-plugin-webpack-helpers/embedded-bundle-loader'),
+          require.resolve('./embedded-bundle-loader'),
         ]
       },
       // JS and TS
