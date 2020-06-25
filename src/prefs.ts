@@ -1,6 +1,7 @@
 const DEFAULT_PREFS = {
   xSpacing: 100,
   ySpacing: 400,
+  shouldRename: false
 };
 
 export function resolvePagePrefs(page: PageNode) {
