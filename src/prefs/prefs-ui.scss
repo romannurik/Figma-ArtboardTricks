@@ -4,6 +4,27 @@ body {
   margin: 8px;
 }
 
+.buttons {
+  position: fixed;
+  bottom: 8px;
+  display: flex;
+  justify-content: center;
+  width: calc(100vw - 16px);
+}
+
 .buttons > * {
   margin: 8px 0 8px 8px;
+}
+
+.input-icon__input {
+  border: 1px solid #4848483b;
+}
+
+.row {
+  display: flex;
+  padding: 0 4px 20px 8px;
+  .input-icon {
+    flex: 1;
+    margin-right: 16px;
+  }
 }

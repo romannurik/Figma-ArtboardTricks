@@ -83,10 +83,14 @@ export default function rearrangeGrid() {
   let y = originY;
   rows.forEach((artboardsInRow, r) => {
     let x = originX;
-    artboardsInRow.forEach(artboard => {
+    artboardsInRow.forEach((artboard, index) => {
       artboard.x = x;
       artboard.y = y;
       x += artboard.width + currentPrefs.xSpacing;
+
+      if (currentPrefs.shouldRename) {
+        artboard.name = `${String.fromCharCode(65 + r)}${('0' + (index + 1)).slice(-2)}`;
+      }
     });
     y += rowHeights[r] + currentPrefs.ySpacing;
   });

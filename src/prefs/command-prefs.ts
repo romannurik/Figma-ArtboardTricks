@@ -15,12 +15,12 @@ function setupMessageHandlers() {
     switch (msg.type) {
       case 'save-prefs': {
         let {prefs} = msg;
-        let {xSpacing, ySpacing} = prefs;
-        figma.currentPage.setPluginData('prefs', JSON.stringify({xSpacing, ySpacing}));
+        let {xSpacing, ySpacing, shouldRename} = prefs;
+        figma.currentPage.setPluginData('prefs', JSON.stringify({xSpacing, ySpacing, shouldRename}));
         figma.closePlugin();
         break;
       }
-  
+
       case 'cancel-prefs': {
         figma.closePlugin();
         break;
