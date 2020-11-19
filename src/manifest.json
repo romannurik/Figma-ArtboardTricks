@@ -2,7 +2,7 @@
   "api": "1.0.0",
   "name": "Artboard Tricks",
   "main": "main.js",
-  "id": "813813054094909882",
+  "id": "%%PLUGIN_ID%%",
   "menu": [
     {
       "name": "Rearrange Artboards Into Grid",

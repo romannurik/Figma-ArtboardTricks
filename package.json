@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "webpack",
-    "watch": "webpack --watch"
+    "build:google": "PLUGIN_ID=813813054094909882 webpack",
+    "watch:google": "PLUGIN_ID=813813054094909882 webpack --watch",
+    "build": "PLUGIN_ID=911261236876701307 webpack",
+    "watch": "PLUGIN_ID=911261236876701307 webpack --watch"
   },
   "author": "Roman Nurik",
   "license": "Apache-2.0",

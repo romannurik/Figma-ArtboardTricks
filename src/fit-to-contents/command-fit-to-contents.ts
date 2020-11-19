@@ -98,8 +98,6 @@ export async function performFitWithPadding(padding, useSavedPadding = false) {
       });
     }
   }
-
-  figma.closePlugin();
 }
 
 async function computeDefaultPadding(artboards: FrameNode[]): Promise<number> {
