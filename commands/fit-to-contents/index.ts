@@ -1,6 +1,8 @@
-import * as html from './fit-ui.html';
+import { createMainThreadMessenger } from 'figma-messenger';
 
-export default async function fitToContents(relaunch = false) {
+const messenger = createMainThreadMessenger<FitMainToIframe, FitIframeToMain>();
+
+export default async function fitToContents({ relaunch }) {
   if (!figma.currentPage.selection.length) {
     figma.notify('Select something first!');
     figma.closePlugin();
@@ -10,34 +12,17 @@ export default async function fitToContents(relaunch = false) {
   if (relaunch) {
     await performFitWithPadding(0, true);
     figma.closePlugin();
-    return;  
+    return;
   }
 
   let padding = await computeDefaultPadding(collectSelectedArtboards());
-  setupMessageHandlers();
-  figma.showUI(html);
-  figma.ui.postMessage({
-    type: 'init',
-    padding,
+  figma.showUI(__html__);
+  messenger.on('performFit', async ({ padding }) => {
+    await performFitWithPadding(padding);
+    figma.closePlugin();
   });
-}
-
-function setupMessageHandlers() {
-  figma.ui.onmessage = async msg => {
-    switch (msg.type) {
-      case 'perform-fit': {
-        let {padding} = msg;
-        await performFitWithPadding(padding);
-        figma.closePlugin();
-        break;
-      }
-  
-      case 'cancel': {
-        figma.closePlugin();
-        break;
-      }
-    }
-  };
+  messenger.on('cancel', () => figma.closePlugin());
+  messenger.send('init', { padding });
 }
 
 export async function performFitWithPadding(padding, useSavedPadding = false) {
@@ -57,19 +42,19 @@ export async function performFitWithPadding(padding, useSavedPadding = false) {
         if (!isNaN(savedPadding)) {
           artboardPadding = savedPadding;
         }
-      } catch (e) {}
+      } catch (e) { }
     }
 
     // collect boundaries
     let bounds = visibleChildren
-      .reduce(({l, t, r, b}, child) => {
+      .reduce(({ l, t, r, b }, child) => {
         return {
           l: Math.min(child.x, l),
           t: Math.min(child.y, t),
           r: Math.max(child.x + child.width, r),
           b: Math.max(child.y + child.height, b),
         }
-      }, {l: Infinity, t: Infinity, r: -Infinity, b: -Infinity});
+      }, { l: Infinity, t: Infinity, r: -Infinity, b: -Infinity });
 
     // expand boundaries to padding
     bounds.l -= artboardPadding;
@@ -79,8 +64,8 @@ export async function performFitWithPadding(padding, useSavedPadding = false) {
 
     // resize and reposition artboard
     artboard.resizeWithoutConstraints(
-        bounds.r - bounds.l,
-        bounds.b - bounds.t);
+      bounds.r - bounds.l,
+      bounds.b - bounds.t);
 
     // reposition layers
     artboard.x += bounds.l;
@@ -94,7 +79,7 @@ export async function performFitWithPadding(padding, useSavedPadding = false) {
     if (!useSavedPadding) {
       await artboard.setPluginData('padding', String(padding));
       artboard.setRelaunchData({
-        'relaunch-fit-to-contents': `With ${padding}px padding`
+        'relaunch_fit-to-contents': `With ${padding}px padding`
       });
     }
   }
@@ -107,7 +92,7 @@ async function computeDefaultPadding(artboards: FrameNode[]): Promise<number> {
       if (!isNaN(artboardPadding)) {
         return artboardPadding;
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   return 0;

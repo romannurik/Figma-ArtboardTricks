@@ -1,0 +1,13 @@
+@import "~react-figma-plugin-ds/figma-plugin-ds.css";
+
+body {
+  margin: 8px;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 8px;
+  gap: 8px;
+}

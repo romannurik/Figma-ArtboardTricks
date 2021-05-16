@@ -1,14 +1,14 @@
-import * as common from '../common';
-import * as util from '../util';
-import * as prefs from '../prefs';
+import * as common from '../../common';
+import * as util from '../../util';
+import * as prefs from '../../prefs';
 
 export default function rearrangeGrid() {
   let currentPrefs = prefs.resolvePagePrefs(figma.currentPage);
   let artboards = common.collectTargetArtboards();
 
-  // figma.currentPage.setRelaunchData({
-  //   'relaunch-rearrange': ''
-  // });
+  figma.currentPage.setRelaunchData({
+    'relaunch_rearrange-grid': ''
+  });
 
   // find row-starting artboards
   let rowStarterArtboards: FrameNode[] = [];

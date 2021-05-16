@@ -1,12 +1,11 @@
 {
   "api": "1.0.0",
   "name": "Artboard Tricks",
-  "main": "main.js",
   "id": "%%PLUGIN_ID%%",
   "menu": [
     {
       "name": "Rearrange Artboards Into Grid",
-      "command": "rearrange"
+      "command": "rearrange-grid"
     },
     {
       "name": "Artboard Tricks Preferences",
@@ -19,11 +18,11 @@
   ],
   "relaunchButtons": [
     {
-      "command": "relaunch-rearrange",
+      "command": "relaunch_rearrange",
       "name": "Rearrange Artboards Into Grid"
     },
     {
-      "command": "relaunch-fit-to-contents",
+      "command": "relaunch_fit-to-contents",
       "name": "Fit Artboard to Contents",
       "multipleSelection": true
     }
