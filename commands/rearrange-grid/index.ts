@@ -92,6 +92,14 @@ export default function rearrangeGrid() {
   });
 
   // update artboard position in the sidebar
-  util.reorderNodes(artboards);
+  let sortedArtboards = [];
+  rows.forEach(artboardsInRow => {
+    artboardsInRow.forEach(artboard => {
+      sortedArtboards.push(artboard);
+    });
+  });
+
+  // update artboard position in the sidebar
+  util.reorderNodes(sortedArtboards);
   figma.closePlugin();
 }

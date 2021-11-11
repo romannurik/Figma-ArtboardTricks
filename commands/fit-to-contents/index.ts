@@ -1,32 +1,40 @@
-import { createMainThreadMessenger } from 'figma-messenger';
-
-const messenger = createMainThreadMessenger<FitMainToIframe, FitIframeToMain>();
+import { isArtboard } from "../../util";
 
 export default async function fitToContents({ relaunch }) {
+  if (relaunch) {
+    performFitWithPadding(0, true);
+    figma.closePlugin();
+    return;
+  }
+
   if (!figma.currentPage.selection.length) {
     figma.notify('Select something first!');
     figma.closePlugin();
     return;
   }
 
-  if (relaunch) {
-    await performFitWithPadding(0, true);
-    figma.closePlugin();
-    return;
-  }
+  figma.parameters.on('input', ({ key, query, result }: ParameterInputEvent) => {
+    switch (key) {
+      case 'padding': {
+        const padding = parseInt(query, 10);
+        isNaN(padding)
+          ? result.setSuggestions([])
+          : result.setSuggestions([padding.toString()]);
+        break;
+      }
+    }
+  });
 
-  let padding = await computeDefaultPadding(collectSelectedArtboards());
-  figma.showUI(__html__);
-  messenger.on('performFit', async ({ padding }) => {
-    await performFitWithPadding(padding);
+  figma.on('run', ({ parameters }: RunEvent) => {
+    const padding = parseInt(parameters.padding, 10);
+    isNaN(padding)
+      ? performFitWithPadding(0, true)
+      : performFitWithPadding(padding, false);
     figma.closePlugin();
   });
-  messenger.on('cancel', () => figma.closePlugin());
-  messenger.send('init', { padding });
 }
 
-export async function performFitWithPadding(padding, useSavedPadding = false) {
-  // collect artboards
+export function performFitWithPadding(padding, useSavedPadding = false) {
   let artboards = collectSelectedArtboards();
 
   for (let artboard of artboards) {
@@ -38,7 +46,7 @@ export async function performFitWithPadding(padding, useSavedPadding = false) {
     let artboardPadding = padding;
     if (useSavedPadding) {
       try {
-        let savedPadding = parseInt(await artboard.getPluginData('padding'), 10);
+        let savedPadding = parseInt(artboard.getPluginData('padding'), 10);
         if (!isNaN(savedPadding)) {
           artboardPadding = savedPadding;
         }
@@ -77,25 +85,12 @@ export async function performFitWithPadding(padding, useSavedPadding = false) {
 
     // persist data and add relaunch buttons
     if (!useSavedPadding) {
-      await artboard.setPluginData('padding', String(padding));
+      artboard.setPluginData('padding', String(padding));
       artboard.setRelaunchData({
-        'relaunch_fit-to-contents': `With ${padding}px padding`
+        'relaunch_fit-to-contents': `With ${padding} padding`
       });
     }
   }
-}
-
-async function computeDefaultPadding(artboards: FrameNode[]): Promise<number> {
-  for (let artboard of artboards) {
-    try {
-      let artboardPadding = parseInt(artboard.getPluginData('padding'), 10);
-      if (!isNaN(artboardPadding)) {
-        return artboardPadding;
-      }
-    } catch (e) { }
-  }
-
-  return 0;
 }
 
 function collectSelectedArtboards(): FrameNode[] {
@@ -106,5 +101,5 @@ function collectSelectedArtboards(): FrameNode[] {
       }
       return node;
     })
-    .filter(node => node && node.type == 'FRAME')) as Set<FrameNode>];
+    .filter(node => isArtboard(node))) as Set<FrameNode>];
 }

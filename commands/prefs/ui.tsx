@@ -24,17 +24,17 @@ function App() {
   function handleSave() {
     let xs = parseInt(xSpacing, 10);
     let ys = parseInt(ySpacing, 10);
-    if (isNaN(xSpacing)) {
+    if (isNaN(xs)) {
       xs = defaultPrefs.xSpacing;
     }
-    if (isNaN(ySpacing)) {
+    if (isNaN(ys)) {
       ys = defaultPrefs.ySpacing;
     }
     messenger.send('savePrefs', { prefs: { xSpacing: xs, ySpacing: ys } });
   }
 
   if (!loaded) {
-    return 'Loading...';
+    return <>'Loading...'</>;
   }
 
   return <>

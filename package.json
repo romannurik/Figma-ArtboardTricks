@@ -8,7 +8,7 @@
     "start": "PLUGIN_ID=911261236876701307 figpack --watch"
   },
   "devDependencies": {
-    "@figma/plugin-typings": "^1.23.0",
+    "@figma/plugin-typings": "^1.38.0",
     "@types/react": "^16.14.0",
     "figpack": "^0.1.5"
   },

@@ -1,9 +1,16 @@
+
+const ARTBOARD_NODE_TYPES: Set<SceneNode['type']> = new Set([
+  'FRAME',
+  'COMPONENT',
+  'COMPONENT_SET',
+]);
+
 /**
  * Returns true if the given layer is an artboard-like object (i.e. an artboard
  * or a symbol master).
  */
 export function isArtboard(node: SceneNode) {
-  return node.type == 'FRAME' && node.parent && node.parent.type == 'PAGE';
+  return node && ARTBOARD_NODE_TYPES.has(node.type) && node.parent && node.parent.type == 'PAGE';
 }
 
 

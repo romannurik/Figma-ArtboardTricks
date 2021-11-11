@@ -13,7 +13,15 @@
     },
     {
       "name": "Fit Artboard to Contents",
-      "command": "fit-to-contents"
+      "command": "fit-to-contents",
+      "parameters": [
+        {
+          "name": "Padding",
+          "key": "padding",
+          "description": "Spacing around artboard contents",
+          "optional": true
+        }
+      ]
     }
   ],
   "relaunchButtons": [
