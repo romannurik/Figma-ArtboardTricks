@@ -2,6 +2,9 @@
   "api": "1.0.0",
   "name": "Artboard Tricks",
   "id": "%%PLUGIN_ID%%",
+  "editorType": [
+    "figma"
+  ],
   "menu": [
     {
       "name": "Rearrange Artboards Into Grid",
