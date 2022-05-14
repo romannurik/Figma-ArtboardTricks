@@ -1,19 +1,19 @@
 import { isArtboard } from "../../util";
 
-export default async function fitToContents({ relaunch }) {
-  if (relaunch) {
+export default async function fitToContents() {
+  if (figma.command.startsWith('relaunch')) {
     performFitWithPadding(0, true);
     figma.closePlugin();
     return;
   }
 
-  if (!figma.currentPage.selection.length) {
-    figma.notify('Select something first!');
-    figma.closePlugin();
-    return;
-  }
-
   figma.parameters.on('input', ({ key, query, result }: ParameterInputEvent) => {
+    if (!figma.currentPage.selection.length) {
+      result.setError('Select something first!');
+      return;
+    }
+  
+
     switch (key) {
       case 'padding': {
         const padding = parseInt(query, 10);
@@ -26,7 +26,13 @@ export default async function fitToContents({ relaunch }) {
   });
 
   figma.on('run', ({ parameters }: RunEvent) => {
-    const padding = parseInt(parameters.padding, 10);
+    if (!figma.currentPage.selection.length) {
+      figma.notify('Select something first!');
+      figma.closePlugin();
+      return;
+    }
+  
+    const padding = parseInt(parameters?.padding, 10);
     isNaN(padding)
       ? performFitWithPadding(0, true)
       : performFitWithPadding(padding, false);
@@ -34,7 +40,7 @@ export default async function fitToContents({ relaunch }) {
   });
 }
 
-export function performFitWithPadding(padding, useSavedPadding = false) {
+export function performFitWithPadding(padding: number, useSavedPadding = false) {
   let artboards = collectSelectedArtboards();
 
   for (let artboard of artboards) {

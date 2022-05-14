@@ -1,65 +1,60 @@
-import { createIframeMessenger } from 'figma-messenger';
-import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
-import { Button, Input, Title } from 'react-figma-plugin-ds';
-import './ui.scss';
+import { Button, Container, IconDistributeHorizontalSpacing32, IconDistributeVerticalSpacing32, Inline, render, Stack, Text, Textbox, TextboxNumeric, useInitialFocus, VerticalSpace } from '@create-figma-plugin/ui';
+import { emit } from '@create-figma-plugin/utilities';
+import { Fragment, h } from 'preact';
+import { useState } from 'preact/hooks';
+import { Prefs } from '../../prefs';
 
-const messenger = createIframeMessenger<PrefsIframeToMain, PrefsMainToIframe>();
+function Plugin({ prefs: defaultPrefs }: { prefs: Prefs }) {
+  let [xSpacing, setXSpacing] = useState(String(defaultPrefs.xSpacing));
+  let [ySpacing, setYSpacing] = useState(String(defaultPrefs.ySpacing));
 
-function App() {
-  let [defaultPrefs, setDefaultPrefs] = useState({ xSpacing: 0, ySpacing: 0 });
-  let [xSpacing, setXSpacing] = useState('');
-  let [ySpacing, setYSpacing] = useState('');
-  let [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    messenger.on('init', ({ prefs }) => {
-      setDefaultPrefs(prefs);
-      setXSpacing(String(prefs.xSpacing));
-      setYSpacing(String(prefs.ySpacing));
-      setLoaded(true);
-    });
-  }, []);
+  let xs = parseInt(xSpacing, 10);
+  let ys = parseInt(ySpacing, 10);
 
   function handleSave() {
-    let xs = parseInt(xSpacing, 10);
-    let ys = parseInt(ySpacing, 10);
-    if (isNaN(xs)) {
-      xs = defaultPrefs.xSpacing;
+    if (isNaN(xs) || isNaN(ys)) {
+      return;
     }
-    if (isNaN(ys)) {
-      ys = defaultPrefs.ySpacing;
-    }
-    messenger.send('savePrefs', { prefs: { xSpacing: xs, ySpacing: ys } });
+
+    emit('SAVE_PREFS', { prefs: { xSpacing: xs, ySpacing: ys } });
   }
 
-  if (!loaded) {
-    return <>'Loading...'</>;
-  }
-
-  return <>
-    <Title weight="bold">"Rearrange" spacing for frames on this page:</Title>
-    <Input
-      placeholder="Horizontal"
-      icon="distribute-horizontal-spacing"
-      iconColor="black"
-      defaultValue={xSpacing}
-      type="number"
-      onChange={value => setXSpacing(value)} />
-    <Input
-      placeholder="Vertical"
-      icon="distribute-vertical-spacing"
-      iconColor="black"
-      defaultValue={ySpacing}
-      type="number"
-      onChange={value => setYSpacing(value)} />
-    <div className="buttons">
-      <Button onClick={handleSave}
-        isDisabled={xSpacing === '' || ySpacing === ''}>Save</Button>
-      <Button onClick={() => messenger.send('cancel')} isSecondary>Cancel</Button>
-    </div>
-  </>;
+  return <Container onKeyDown={ev => {
+    if (ev.key === 'Escape') {
+      emit('CANCEL');
+    } else if (ev.key === 'Enter') {
+      handleSave();
+    }
+  }}>
+    <VerticalSpace space='small' />
+    <Stack space="small">
+      <Text bold>"Rearrange" spacing for frames on this page:</Text>
+      <TextboxNumeric
+        {...useInitialFocus()}
+        placeholder="Horizontal"
+        minimum={0}
+        revertOnEscapeKeyDown
+        icon={<IconDistributeHorizontalSpacing32 />}
+        value={xSpacing}
+        onValueInput={value => setXSpacing(value)} />
+      <TextboxNumeric
+        placeholder="Vertical"
+        minimum={0}
+        revertOnEscapeKeyDown
+        icon={<IconDistributeVerticalSpacing32 />}
+        value={ySpacing}
+        onValueInput={value => setYSpacing(value)} />
+      <Inline style={{ display: 'flex', justifyContent: 'flex-end' }} space='small'>
+        <Button secondary onClick={() => emit('CANCEL')}>
+          Cancel
+        </Button>
+        <Button onClick={handleSave} disabled={isNaN(xs) || isNaN(ys)}>
+          Save
+        </Button>
+      </Inline>
+    </Stack>
+    <VerticalSpace space='small' />
+  </Container>;
 }
 
-
-ReactDOM.render(<App />, document.querySelector('.root'));
+export default render(Plugin);

@@ -1,26 +1,28 @@
 {
   "api": "1.0.0",
-  "name": "Artboard Tricks",
-  "id": "%%PLUGIN_ID%%",
   "editorType": [
     "figma"
   ],
+  "id": "911261236876701307",
+  "name": "Artboard Tricks",
+  "main": "build/main.js",
+  "ui": "build/ui.js",
   "menu": [
     {
       "name": "Rearrange Artboards Into Grid",
-      "command": "rearrange-grid"
+      "command": "./commands/rearrange-grid--default"
     },
     {
       "name": "Artboard Tricks Preferences",
-      "command": "prefs"
+      "command": "./commands/prefs--default"
     },
     {
       "name": "Fit Artboard to Contents",
-      "command": "fit-to-contents",
+      "command": "./commands/fit-to-contents--default",
       "parameters": [
         {
-          "name": "Padding",
           "key": "padding",
+          "name": "Padding",
           "description": "Spacing around artboard contents",
           "optional": true
         }
@@ -29,12 +31,12 @@
   ],
   "relaunchButtons": [
     {
-      "command": "relaunch_rearrange",
-      "name": "Rearrange Artboards Into Grid"
+      "name": "Rearrange Artboards Into Grid",
+      "command": "relaunch_fit-to-contents"
     },
     {
-      "command": "relaunch_fit-to-contents",
       "name": "Fit Artboard to Contents",
+      "command": "relaunch_rearrange-grid",
       "multipleSelection": true
     }
   ]

@@ -1,14 +1,18 @@
-import { createMainThreadMessenger } from 'figma-messenger';
+import { on, showUI } from '@create-figma-plugin/utilities';
 import * as prefs from '../../prefs';
 
 export default function showPrefs() {
-  figma.showUI(__html__);
-  const messenger = createMainThreadMessenger<PrefsMainToIframe, PrefsIframeToMain>();
-  messenger.on('savePrefs', ({ prefs }) => {
+  showUI({
+    height: 156,
+    title: 'Artboard Tricks Preferences',
+    // themeColors: true,
+  }, {
+    prefs: prefs.resolvePagePrefs(figma.currentPage)
+  });
+  on('SAVE_PREFS', ({ prefs }) => {
     let { xSpacing, ySpacing } = prefs;
     figma.currentPage.setPluginData('prefs', JSON.stringify({ xSpacing, ySpacing }));
     figma.closePlugin();
   });
-  messenger.on('cancel', () => figma.closePlugin());
-  messenger.send('init', { prefs: prefs.resolvePagePrefs(figma.currentPage) });
+  on('CANCEL', () => figma.closePlugin());
 }

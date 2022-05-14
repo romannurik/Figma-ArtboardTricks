@@ -92,7 +92,7 @@ export default function rearrangeGrid() {
   });
 
   // update artboard position in the sidebar
-  let sortedArtboards = [];
+  let sortedArtboards: FrameNode[] = [];
   rows.forEach(artboardsInRow => {
     artboardsInRow.forEach(artboard => {
       sortedArtboards.push(artboard);
