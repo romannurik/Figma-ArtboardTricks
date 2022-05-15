@@ -2,10 +2,8 @@
   "name": "artboard-tricks-figma-plugin",
   "version": "1.0.0",
   "scripts": {
-    "OLD_build:google": "PLUGIN_ID=813813054094909882 figpack",
-    "OLD_start:google": "PLUGIN_ID=813813054094909882 figpack --watch",
-    "OLD_build": "PLUGIN_ID=911261236876701307 figpack",
-    "OLD_start": "PLUGIN_ID=911261236876701307 figpack --watch",
+    "build:google": "PLUGIN_ID=813813054094909882 npm run build",
+    "start:google": "PLUGIN_ID=813813054094909882 npm run start",
     "build": "build-figma-plugin --typecheck --minify",
     "start": "build-figma-plugin --typecheck --watch"
   },
@@ -22,6 +20,7 @@
     "classnames": "^2.2.6"
   },
   "figma-plugin": {
+    "id": "911261236876701307",
     "name": "Artboard Tricks",
     "menu": [
       {
@@ -56,7 +55,6 @@
         "main": "./commands/fit-to-contents",
         "multipleSelection": true
       }
-    },
-    "id": "911261236876701307"
+    }
   }
 }
