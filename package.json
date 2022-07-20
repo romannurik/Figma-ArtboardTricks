@@ -4,18 +4,18 @@
   "scripts": {
     "build:google": "PLUGIN_ID=813813054094909882 npm run build",
     "start:google": "PLUGIN_ID=813813054094909882 npm run start",
-    "build": "build-figma-plugin --typecheck --minify",
-    "start": "build-figma-plugin --typecheck --watch"
+    "build": "build-figma-plugin --minify",
+    "start": "build-figma-plugin --watch"
   },
   "devDependencies": {
-    "@create-figma-plugin/build": "^1.9.2",
-    "@create-figma-plugin/tsconfig": "^1.9.2",
+    "@create-figma-plugin/build": "^2.1.1",
+    "@create-figma-plugin/tsconfig": "^2.1.1",
     "@figma/plugin-typings": "^1.47.0",
     "typescript": "^4"
   },
   "dependencies": {
-    "@create-figma-plugin/ui": "^1.9.2",
-    "@create-figma-plugin/utilities": "^1.9.2",
+    "@create-figma-plugin/ui": "^2.1.1",
+    "@create-figma-plugin/utilities": "^2.1.1",
     "preact": "^10",
     "classnames": "^2.2.6"
   },
@@ -46,11 +46,11 @@
       }
     ],
     "relaunchButtons": {
-      "relaunch_fit-to-contents": {
+      "relaunch_rearrange-grid": {
         "name": "Rearrange Artboards Into Grid",
         "main": "./commands/rearrange-grid"
       },
-      "relaunch_rearrange-grid": {
+      "relaunch_fit-to-contents": {
         "name": "Fit Artboard to Contents",
         "main": "./commands/fit-to-contents",
         "multipleSelection": true

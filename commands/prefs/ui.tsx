@@ -1,4 +1,4 @@
-import { Button, Container, IconDistributeHorizontalSpacing32, IconDistributeVerticalSpacing32, Inline, render, Stack, Text, Textbox, TextboxNumeric, useInitialFocus, VerticalSpace } from '@create-figma-plugin/ui';
+import { Bold, Button, Container, IconDistributeHorizontalSpacing32, IconDistributeVerticalSpacing32, Inline, render, Stack, Text, TextboxNumeric, useInitialFocus, VerticalSpace } from '@create-figma-plugin/ui';
 import { emit } from '@create-figma-plugin/utilities';
 import { Fragment, h } from 'preact';
 import { useState } from 'preact/hooks';
@@ -19,7 +19,7 @@ function Plugin({ prefs: defaultPrefs }: { prefs: Prefs }) {
     emit('SAVE_PREFS', { prefs: { xSpacing: xs, ySpacing: ys } });
   }
 
-  return <Container onKeyDown={ev => {
+  return <Container space="small" onKeyDown={ev => {
     if (ev.key === 'Escape') {
       emit('CANCEL');
     } else if (ev.key === 'Enter') {
@@ -28,8 +28,11 @@ function Plugin({ prefs: defaultPrefs }: { prefs: Prefs }) {
   }}>
     <VerticalSpace space='small' />
     <Stack space="small">
-      <Text bold>"Rearrange" spacing for frames on this page:</Text>
+      <Text>
+        <Bold>"Rearrange" spacing for frames on this page:</Bold>
+      </Text>
       <TextboxNumeric
+        variant="border"
         {...useInitialFocus()}
         placeholder="Horizontal"
         minimum={0}
@@ -38,6 +41,7 @@ function Plugin({ prefs: defaultPrefs }: { prefs: Prefs }) {
         value={xSpacing}
         onValueInput={value => setXSpacing(value)} />
       <TextboxNumeric
+        variant="border"
         placeholder="Vertical"
         minimum={0}
         revertOnEscapeKeyDown

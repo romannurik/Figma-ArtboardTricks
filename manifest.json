@@ -32,11 +32,11 @@
   "relaunchButtons": [
     {
       "name": "Rearrange Artboards Into Grid",
-      "command": "relaunch_fit-to-contents"
+      "command": "relaunch_rearrange-grid"
     },
     {
       "name": "Fit Artboard to Contents",
-      "command": "relaunch_rearrange-grid",
+      "command": "relaunch_fit-to-contents",
       "multipleSelection": true
     }
   ]

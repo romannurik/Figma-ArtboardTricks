@@ -5,7 +5,6 @@ export default function showPrefs() {
   showUI({
     height: 156,
     title: 'Artboard Tricks Preferences',
-    // themeColors: true,
   }, {
     prefs: prefs.resolvePagePrefs(figma.currentPage)
   });
