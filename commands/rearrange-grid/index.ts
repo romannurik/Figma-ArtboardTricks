@@ -1,18 +1,20 @@
 import * as common from '../../common';
-import * as util from '../../util';
 import * as prefs from '../../prefs';
+import * as util from '../../util';
+import { Artboard } from '../../util';
 
 export default function rearrangeGrid() {
-  let currentPrefs = prefs.resolvePagePrefs(figma.currentPage);
   let artboards = common.collectTargetArtboards();
+  let sectionOrPage = common.nearestCommonSectionOrPage(artboards);
+  let currentPrefs = prefs.resolvePrefs(sectionOrPage);
 
-  figma.currentPage.setRelaunchData({
+  sectionOrPage.setRelaunchData({
     'relaunch_rearrange-grid': ''
   });
 
   // find row-starting artboards
-  let rowStarterArtboards: FrameNode[] = [];
-  artboards.forEach((artboard: FrameNode) => {
+  let rowStarterArtboards: Artboard[] = [];
+  artboards.forEach((artboard: Artboard) => {
     let leftmostInRow = true;
     artboards.forEach(otherArtboard => {
       if (artboard === otherArtboard) {
@@ -37,11 +39,11 @@ export default function rearrangeGrid() {
   rowStarterArtboards.sort((a, b) => a.y - b.y);
 
   // start a list of artboards for each row
-  let rows: FrameNode[][] = [];
+  let rows: Artboard[][] = [];
   let rowHeights: number[] = [];
-  let artboardRows = new Map<FrameNode, number>();
+  let artboardRows = new Map<Artboard, number>();
 
-  rowStarterArtboards.forEach((artboard: FrameNode, i) => {
+  rowStarterArtboards.forEach((artboard: Artboard, i) => {
     artboardRows.set(artboard, i);
     rows[i] = [artboard];
     rowHeights[i] = artboard.height;
@@ -92,7 +94,7 @@ export default function rearrangeGrid() {
   });
 
   // update artboard position in the sidebar
-  let sortedArtboards: FrameNode[] = [];
+  let sortedArtboards: Artboard[] = [];
   rows.forEach(artboardsInRow => {
     artboardsInRow.forEach(artboard => {
       sortedArtboards.push(artboard);

@@ -4,7 +4,7 @@ import { Fragment, h } from 'preact';
 import { useState } from 'preact/hooks';
 import { Prefs } from '../../prefs';
 
-function Plugin({ prefs: defaultPrefs }: { prefs: Prefs }) {
+function Plugin({ prefs: defaultPrefs, scope }: { prefs: Prefs, scope: string }) {
   let [xSpacing, setXSpacing] = useState(String(defaultPrefs.xSpacing));
   let [ySpacing, setYSpacing] = useState(String(defaultPrefs.ySpacing));
 
@@ -29,7 +29,7 @@ function Plugin({ prefs: defaultPrefs }: { prefs: Prefs }) {
     <VerticalSpace space='small' />
     <Stack space="small">
       <Text>
-        <Bold>"Rearrange" spacing for frames on this page:</Bold>
+        <Bold>"Rearrange" spacing for {scope}:</Bold>
       </Text>
       <TextboxNumeric
         variant="border"

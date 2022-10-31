@@ -1,27 +1,27 @@
+export type Artboard = FrameNode | ComponentNode | ComponentSetNode | SectionNode;
 
-const ARTBOARD_NODE_TYPES: Set<SceneNode['type']> = new Set([
+const ARTBOARD_NODE_TYPES: Set<BaseNode['type']> = new Set([
   'FRAME',
   'COMPONENT',
   'COMPONENT_SET',
+  'SECTION',
 ]);
 
 /**
  * Returns true if the given layer is an artboard-like object (i.e. an artboard
  * or a symbol master).
  */
-export function isArtboard(node: SceneNode) {
-  return node && ARTBOARD_NODE_TYPES.has(node.type) && node.parent && node.parent.type == 'PAGE';
+export function isArtboard(node: BaseNode) {
+  return ARTBOARD_NODE_TYPES.has(node?.type) && (node.parent?.type === 'PAGE' || node.parent?.type === 'SECTION');
 }
 
-
-export function getContainingArtboard(node: SceneNode): FrameNode | null {
-  while (!!node && !isArtboard(node)) {
-    node = node.parent as SceneNode;
+export function getContainingArtboard(node: BaseNode): Artboard | null {
+  while (node && !isArtboard(node)) {
+    node = node.parent as BaseNode;
   }
 
-  return node as FrameNode;
+  return node as Artboard;
 }
-
 
 /**
  * Reorders the given layers in the layer list based on their position in the array.

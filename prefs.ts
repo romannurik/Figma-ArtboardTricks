@@ -8,12 +8,11 @@ const DEFAULT_PREFS: Prefs = {
   ySpacing: 400,
 };
 
-export function resolvePagePrefs(page: PageNode): Prefs {
+export function resolvePrefs(node?: BaseNode): Prefs {
   let prefs = { ...DEFAULT_PREFS };
 
   try {
-    let pagePrefs = JSON.parse(page.getPluginData('prefs'));
-    prefs = { ...prefs, ...pagePrefs };
+    prefs = { ...prefs, ...JSON.parse(node?.getPluginData('prefs') || '{}') };
   } catch (e) { }
 
   return prefs;
