@@ -102,7 +102,7 @@ export function performFitWithPadding(padding: number, useSavedPadding = false) 
 function collectSelectedArtboards(): FrameNode[] {
   return [...new Set(figma.currentPage.selection
     .map(node => {
-      while (node.parent && node.parent.type != 'PAGE') {
+      while (node.parent && (node.parent.type !== 'PAGE' && node.parent.type !== 'SECTION')) {
         node = node.parent as SceneNode;
       }
       return node;
